@@ -797,7 +797,6 @@
         <nav class="nav" aria-label="Navegacao">
           <a href="#capitulos">Capitulos</a>
           <a href="#memorias">Memorias</a>
-          <a href="#editar">Editar</a>
         </nav>
         <button class="share-button" type="button" data-share>Compartilhar</button>
       </header>
@@ -812,7 +811,7 @@
             <p class="eyebrow" data-bind="tagline">Original da nossa historia</p>
             <h1 data-bind="title">O Filme de Nos Dois</h1>
             <ul class="meta" aria-label="Detalhes do filme">
-              <li data-bind="year">Desde 2019</li>
+              <li data-bind="year">Desde 2006</li>
               <li>Romance real</li>
               <li data-bind="rating">Livre para sonhar</li>
               <li data-bind="duration">Para sempre</li>
@@ -826,10 +825,6 @@
               <button class="primary" type="button" data-open-player>
                 <span aria-hidden="true">▶</span>
                 Assistir agora
-              </button>
-              <button class="secondary" type="button" data-scroll-edit>
-                <span aria-hidden="true">＋</span>
-                Personalizar
               </button>
             </div>
           </div>
@@ -907,96 +902,6 @@
           </div>
         </section>
 
-        <section class="studio" id="editar">
-          <div class="section studio-grid">
-            <div class="studio-copy">
-              <p class="section-kicker">Modo diretor</p>
-              <h2>Deixe com a cara de voces</h2>
-              <p>
-                Troque capa, poster e texto. O teste fica guardado neste navegador; para todo mundo
-                ver as fotos, envie `capa.jpg` e `poster.jpg` para a pasta `dist/assets` no GitHub.
-              </p>
-            </div>
-
-            <form class="editor" aria-label="Editor da historia">
-              <div class="editor-actions">
-                <label class="tool-button">
-                  Trocar capa
-                  <input type="file" accept="image/*" data-file="backdrop" />
-                </label>
-                <label class="tool-button">
-                  Trocar poster
-                  <input type="file" accept="image/*" data-file="poster" />
-                </label>
-                <button class="tool-button" type="button" data-reset>Restaurar</button>
-              </div>
-
-              <div class="field-grid">
-                <label>
-                  Titulo
-                  <input data-edit="title" maxlength="44" />
-                </label>
-                <label>
-                  Chamada
-                  <input data-edit="tagline" maxlength="52" />
-                </label>
-                <label>
-                  Desde
-                  <input data-edit="year" maxlength="24" />
-                </label>
-                <label>
-                  Duracao
-                  <input data-edit="duration" maxlength="24" />
-                </label>
-              </div>
-
-              <label>
-                Sinopse
-                <textarea data-edit="synopsis" maxlength="420"></textarea>
-              </label>
-
-              <label>
-                Frase principal
-                <textarea data-edit="quote" maxlength="180"></textarea>
-              </label>
-
-              <div class="field-grid">
-                <label>
-                  Capitulo 1
-                  <input data-edit="episodeOneTitle" maxlength="38" />
-                </label>
-                <label>
-                  Texto 1
-                  <input data-edit="episodeOneText" maxlength="96" />
-                </label>
-                <label>
-                  Capitulo 2
-                  <input data-edit="episodeTwoTitle" maxlength="38" />
-                </label>
-                <label>
-                  Texto 2
-                  <input data-edit="episodeTwoText" maxlength="96" />
-                </label>
-                <label>
-                  Capitulo 3
-                  <input data-edit="episodeThreeTitle" maxlength="38" />
-                </label>
-                <label>
-                  Texto 3
-                  <input data-edit="episodeThreeText" maxlength="96" />
-                </label>
-                <label>
-                  Capitulo 4
-                  <input data-edit="episodeFourTitle" maxlength="38" />
-                </label>
-                <label>
-                  Texto 4
-                  <input data-edit="episodeFourText" maxlength="96" />
-                </label>
-              </div>
-            </form>
-          </div>
-        </section>
       </main>
 
       <footer>
@@ -1035,7 +940,7 @@
       const defaults = {
         title: "O Filme de Nos Dois",
         tagline: "Original da nossa historia",
-        year: "Desde 2019",
+        year: "Desde 2006",
         rating: "Livre para sonhar",
         duration: "Para sempre",
         synopsis:
@@ -1063,34 +968,14 @@
         statThreeLabel: "historia favorita",
       };
 
-      const storageKey = "mynetflix-story-v1";
-      const imageKey = "mynetflix-images-v1";
       const bindTargets = [...document.querySelectorAll("[data-bind]")];
-      const editFields = [...document.querySelectorAll("[data-edit]")];
       const toast = document.querySelector(".toast");
       const backdrop = document.querySelector("#backdrop");
       const poster = document.querySelector("#poster");
       const playerImage = document.querySelector("#playerImage");
       const dialog = document.querySelector("#playerDialog");
 
-      const readStorage = (key, fallback) => {
-        try {
-          return JSON.parse(localStorage.getItem(key)) || fallback;
-        } catch {
-          return fallback;
-        }
-      };
-
-      let story = { ...defaults, ...readStorage(storageKey, {}) };
-      let images = readStorage(imageKey, {});
-
-      const saveStory = () => {
-        localStorage.setItem(storageKey, JSON.stringify(story));
-      };
-
-      const saveImages = () => {
-        localStorage.setItem(imageKey, JSON.stringify(images));
-      };
+      const story = { ...defaults };
 
       const showToast = (message) => {
         toast.textContent = message;
@@ -1100,7 +985,7 @@
       };
 
       const updateEpisodeImages = () => {
-        const image = images.backdrop || fallbackImages.backdrop;
+        const image = "assets/capa.jpg";
         document.querySelectorAll(".episode").forEach((episode) => {
           episode.style.setProperty("--episode-image", `url("${image}")`);
         });
@@ -1112,13 +997,9 @@
           node.textContent = story[key] || defaults[key] || "";
         });
 
-        editFields.forEach((field) => {
-          field.value = story[field.dataset.edit] || "";
-        });
-
-        backdrop.src = images.backdrop || "assets/capa.jpg";
-        poster.src = images.poster || "assets/poster.jpg";
-        playerImage.src = images.backdrop || "assets/capa.jpg";
+        backdrop.src = "assets/capa.jpg";
+        poster.src = "assets/poster.jpg";
+        playerImage.src = "assets/capa.jpg";
         updateEpisodeImages();
       };
 
@@ -1130,46 +1011,6 @@
 
       poster.addEventListener("error", () => {
         if (!poster.src.endsWith("poster.svg")) poster.src = fallbackImages.poster;
-      });
-
-      editFields.forEach((field) => {
-        field.addEventListener("input", () => {
-          story[field.dataset.edit] = field.value;
-          if (field.dataset.edit === "title") {
-            story.posterTitle = field.value.replace(/^O\s+/i, "").slice(0, 24) || defaults.posterTitle;
-          }
-          saveStory();
-          render();
-        });
-      });
-
-      document.querySelectorAll("[data-file]").forEach((field) => {
-        field.addEventListener("change", () => {
-          const file = field.files && field.files[0];
-          if (!file) return;
-
-          const reader = new FileReader();
-          reader.onload = () => {
-            images[field.dataset.file] = reader.result;
-            saveImages();
-            render();
-            showToast("Foto atualizada neste navegador.");
-          };
-          reader.readAsDataURL(file);
-        });
-      });
-
-      document.querySelector("[data-reset]").addEventListener("click", () => {
-        localStorage.removeItem(storageKey);
-        localStorage.removeItem(imageKey);
-        story = { ...defaults };
-        images = {};
-        render();
-        showToast("Versao inicial restaurada.");
-      });
-
-      document.querySelector("[data-scroll-edit]").addEventListener("click", () => {
-        document.querySelector("#editar").scrollIntoView({ behavior: "smooth", block: "start" });
       });
 
       document.querySelector("[data-open-player]").addEventListener("click", () => {
