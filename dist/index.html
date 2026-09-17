@@ -1194,6 +1194,14 @@
         pointer-events: none;
       }
 
+      .music-audio {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        opacity: 0.01;
+        pointer-events: none;
+      }
+
       @keyframes cinematic-zoom {
         from { transform: scale(1.02); }
         to { transform: scale(1.09); }
@@ -1283,7 +1291,7 @@
 
       <main>
         <section class="featured" id="inicio" aria-label="Destaque">
-          <img src="assets/foto-10.jpg" alt="Foto do casal juntos" />
+          <img src="assets/capa.jpg" alt="Foto do casal juntos" />
           <div class="featured-content">
             <div class="content-label">Uma historia Netflix</div>
             <h2>O Filme de<br />Nos Dois</h2>
@@ -1426,7 +1434,7 @@
     <dialog class="details-dialog" id="detailsDialog" aria-label="Detalhes do filme">
       <div class="details-sheet">
         <div class="detail-visual">
-          <img src="assets/foto-10.jpg" alt="Foto do casal juntos" />
+          <img src="assets/capa.jpg" alt="Foto do casal juntos" />
           <button class="close-button" type="button" data-close-details aria-label="Fechar">&times;</button>
         </div>
         <div class="detail-body">
@@ -1514,7 +1522,7 @@
           <button class="cinematic-close" type="button" data-close-player aria-label="Fechar">&times;</button>
         </div>
         <div class="cinematic-stage" id="cinematicStage">
-          <img id="slideImage" src="assets/foto-10.jpg" alt="Foto do casal juntos" />
+          <img id="slideImage" src="assets/capa.jpg" alt="Foto do casal juntos" />
           <video id="slideVideo" playsinline muted preload="metadata" hidden></video>
           <div class="cinematic-caption">
             <span class="scene-label" id="sceneLabel">Cena 1</span>
@@ -1539,7 +1547,9 @@
             <span class="cinematic-music">Trilha: All Star - Nando Reis</span>
           </div>
         </div>
-        <iframe id="musicFrame" class="music-frame" title="Trilha sonora All Star de Nando Reis" allow="autoplay; encrypted-media; picture-in-picture"></iframe>
+        <audio id="musicAudio" class="music-audio" preload="auto">
+          <source src="assets/all-star.mp3" type="audio/mpeg" />
+        </audio>
       </div>
     </dialog>
 
@@ -1559,17 +1569,16 @@
       const sceneProgress = document.querySelector("#sceneProgress");
       const toggleIcon = document.querySelector("#toggleIcon");
       const toggleLabel = document.querySelector("#toggleLabel");
-      const musicFrame = document.querySelector("#musicFrame");
+      const musicAudio = document.querySelector("#musicAudio");
       let toastTimer;
       let sceneTimer;
       let activeScene = 0;
       let slideshowPlaying = false;
       let slideshowRun = 0;
 
-      const musicUrl = "https://www.youtube-nocookie.com/embed/C4HeeSug3J8?autoplay=1&controls=0&loop=1&playlist=C4HeeSug3J8&rel=0&playsinline=1";
       const sceneDuration = 5200;
       const scenes = [
-        { type: "image", src: "assets/foto-01.jpg", label: "Cena 1", title: "A primeira fa&iacute;sca", description: "Todo filme bonito comeca com um momento que muda o jeito de olhar." },
+        { type: "image", src: "assets/capa.jpg", label: "Cena 1", title: "A primeira fa&iacute;sca", description: "Todo filme bonito comeca com um momento que muda o jeito de olhar." },
         { type: "image", src: "assets/foto-02.jpg", label: "Cena 2", title: "A familia que cresceu", description: "O amor ganhou novos personagens, novas risadas e ainda mais motivos para celebrar." },
         { type: "image", src: "assets/foto-03.jpg", label: "Cena 3", title: "Do nosso jeito", description: "Entre caminhos, viagens e abra&ccedil;os, voces fizeram do cotidiano uma aventura." },
         { type: "image", src: "assets/foto-04.jpg", label: "Cena 4", title: "Sempre lado a lado", description: "Mesmo quando a cena muda, a melhor parte continua sendo estar junto." },
@@ -1602,6 +1611,21 @@
         toggleIcon.innerHTML = slideshowPlaying
           ? '<path d="M8 5v14M16 5v14"></path>'
           : '<path d="m9 6 9 6-9 6z"></path>';
+      };
+
+      const playMusic = () => {
+        musicAudio.currentTime = 0;
+        const promise = musicAudio.play();
+        if (promise && typeof promise.catch === "function") promise.catch(() => {});
+      };
+
+      const resumeMusic = () => {
+        const promise = musicAudio.play();
+        if (promise && typeof promise.catch === "function") promise.catch(() => {});
+      };
+
+      const pauseMusic = () => {
+        musicAudio.pause();
       };
 
       const renderScene = (index) => {
@@ -1649,7 +1673,7 @@
         renderScene(activeScene);
         updateToggleControl();
         openDialog(playerDialog);
-        musicFrame.src = musicUrl;
+        playMusic();
         scheduleNextScene(runId);
       };
 
@@ -1658,7 +1682,8 @@
         slideshowPlaying = false;
         clearTimeout(sceneTimer);
         slideVideo.pause();
-        musicFrame.src = "about:blank";
+        pauseMusic();
+        musicAudio.currentTime = 0;
         closeDialog(playerDialog);
         updateToggleControl();
       };
@@ -1667,12 +1692,13 @@
         slideshowPlaying = !slideshowPlaying;
         if (slideshowPlaying) {
           slideshowRun += 1;
-          musicFrame.src = musicUrl;
+          resumeMusic();
           scheduleNextScene(slideshowRun);
         } else {
           slideshowRun += 1;
           clearTimeout(sceneTimer);
           slideVideo.pause();
+          pauseMusic();
         }
         updateToggleControl();
       };
@@ -1682,7 +1708,7 @@
         slideshowPlaying = true;
         activeScene = 0;
         renderScene(activeScene);
-        musicFrame.src = musicUrl;
+        playMusic();
         scheduleNextScene(slideshowRun);
         updateToggleControl();
       };
