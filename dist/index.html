@@ -110,37 +110,6 @@
       .signal i:nth-child(3) { height: 11px; }
       .signal i:nth-child(4) { height: 14px; }
 
-      .wifi {
-        position: relative;
-        width: 19px;
-        height: 14px;
-        overflow: hidden;
-      }
-
-      .wifi::before,
-      .wifi::after {
-        position: absolute;
-        left: 50%;
-        display: block;
-        border: 2px solid #f5f5f5;
-        border-color: #f5f5f5 transparent transparent;
-        border-radius: 50%;
-        content: "";
-        transform: translateX(-50%) rotate(45deg);
-      }
-
-      .wifi::before {
-        top: -9px;
-        width: 28px;
-        height: 28px;
-      }
-
-      .wifi::after {
-        top: -4px;
-        width: 16px;
-        height: 16px;
-      }
-
       .battery {
         position: relative;
         width: 31px;
@@ -1038,7 +1007,6 @@
         <span>16:40</span>
         <div class="system-icons" aria-hidden="true">
           <span class="signal"><i></i><i></i><i></i><i></i></span>
-          <span class="wifi"></span>
           <span class="battery">95</span>
         </div>
       </div>
