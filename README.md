@@ -1,5 +1,6 @@
 # MyNetFlix
 
-Um site-presente com cara de tela de filme, feito para contar a historia de um casal.
+Uma experiencia romantica em estilo Netflix, feita para contar a historia de um casal.
 
-As fotos publicadas ficam fixas em `dist/assets/capa.jpg` e `dist/assets/poster.jpg`.
+As fotos principais ficam em `dist/assets/capa.jpg` e `dist/assets/poster.jpg`.
+Os cards com a etiqueta `Trocar depois` usam imagens aleatorias de referencia.
