@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="pt-BR">
+<html lang="pt-BR" class="intro-active">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
@@ -42,6 +42,91 @@
         color: var(--text);
         font-family: Arial, Helvetica, sans-serif;
         -webkit-font-smoothing: antialiased;
+      }
+
+      html.intro-active,
+      html.intro-active body {
+        overflow: hidden;
+      }
+
+      .opening-intro {
+        position: fixed;
+        z-index: 100;
+        inset: 0;
+        display: grid;
+        place-items: center;
+        overflow: hidden;
+        background: #000;
+        opacity: 1;
+        visibility: visible;
+        transition: opacity 620ms ease, visibility 620ms ease;
+      }
+
+      .opening-intro.is-hidden {
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+      }
+
+      .opening-intro::before,
+      .opening-intro::after {
+        position: absolute;
+        left: -22%;
+        width: 144%;
+        content: "";
+        opacity: 0;
+        transform: translateX(-115%) rotate(-8deg);
+      }
+
+      .opening-intro::before {
+        top: 48%;
+        height: 34px;
+        background: var(--red);
+        box-shadow: 0 0 26px rgba(229, 9, 20, 0.5);
+        animation: intro-ribbon 2.35s cubic-bezier(0.72, 0, 0.22, 1) 0.12s both;
+      }
+
+      .opening-intro::after {
+        top: calc(48% + 28px);
+        height: 5px;
+        background: var(--red-soft);
+        animation: intro-ribbon 2.05s cubic-bezier(0.72, 0, 0.22, 1) 0.36s both;
+      }
+
+      .intro-logo {
+        position: relative;
+        z-index: 1;
+        color: var(--red);
+        font-size: 118px;
+        font-weight: 900;
+        line-height: 1;
+        letter-spacing: -20px;
+        opacity: 0;
+        text-shadow: 8px 0 0 #8f0710;
+        transform: translateY(12px) scaleX(0.76);
+        animation: intro-logo-in 1.05s cubic-bezier(0.2, 0.85, 0.28, 1.12) 0.82s both;
+      }
+
+      @keyframes intro-ribbon {
+        0% { opacity: 0; transform: translateX(-115%) rotate(-8deg); }
+        20% { opacity: 1; }
+        72% { opacity: 1; transform: translateX(0) rotate(-8deg); }
+        100% { opacity: 0.7; transform: translateX(115%) rotate(-8deg); }
+      }
+
+      @keyframes intro-logo-in {
+        0% { opacity: 0; transform: translateY(12px) scaleX(0.76) scale(0.7); }
+        68% { opacity: 1; transform: translateY(0) scaleX(0.76) scale(1.04); }
+        100% { opacity: 1; transform: translateY(0) scaleX(0.76) scale(1); }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .opening-intro::before,
+        .opening-intro::after,
+        .intro-logo {
+          animation-duration: 0.01ms;
+          animation-delay: 0ms;
+        }
       }
 
       button,
@@ -1196,6 +1281,10 @@
     </style>
   </head>
   <body>
+    <div class="opening-intro" id="openingIntro" aria-hidden="true">
+      <div class="intro-logo">N</div>
+    </div>
+
     <div class="app-shell">
       <header class="app-header">
         <div class="brand" aria-label="Netflix Inicio">
@@ -1488,6 +1577,7 @@
     <script>
       const detailsDialog = document.querySelector("#detailsDialog");
       const playerDialog = document.querySelector("#playerDialog");
+      const openingIntro = document.querySelector("#openingIntro");
       const toast = document.querySelector(".toast");
       const cinematicStage = document.querySelector("#cinematicStage");
       const slideImage = document.querySelector("#slideImage");
@@ -1505,6 +1595,17 @@
       let activeScene = 0;
       let slideshowPlaying = false;
       let slideshowRun = 0;
+
+      const finishIntro = () => {
+        if (!openingIntro) return;
+        openingIntro.classList.add("is-hidden");
+        document.documentElement.classList.remove("intro-active");
+        window.setTimeout(() => openingIntro.remove(), 700);
+      };
+
+      const introDuration = window.matchMedia("(prefers-reduced-motion: reduce)").matches ? 700 : 3600;
+      window.setTimeout(finishIntro, introDuration);
+      openingIntro?.addEventListener("click", finishIntro);
 
       const sceneDuration = 5200;
       const scenes = [
