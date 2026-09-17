@@ -1564,6 +1564,7 @@
       let sceneTimer;
       let activeScene = 0;
       let slideshowPlaying = false;
+      let slideshowRun = 0;
 
       const musicUrl = "https://www.youtube-nocookie.com/embed/C4HeeSug3J8?autoplay=1&controls=0&loop=1&playlist=C4HeeSug3J8&rel=0&playsinline=1";
       const sceneDuration = 5200;
@@ -1630,26 +1631,30 @@
         }
       };
 
-      const scheduleNextScene = () => {
+      const scheduleNextScene = (runId) => {
         clearTimeout(sceneTimer);
-        if (!slideshowPlaying) return;
+        if (!slideshowPlaying || runId !== slideshowRun) return;
         sceneTimer = setTimeout(() => {
+          if (!slideshowPlaying || runId !== slideshowRun) return;
           renderScene((activeScene + 1) % scenes.length);
-          scheduleNextScene();
+          scheduleNextScene(runId);
         }, sceneDuration);
       };
 
       const startSlideshow = () => {
+        slideshowRun += 1;
+        const runId = slideshowRun;
         slideshowPlaying = true;
         activeScene = 0;
         renderScene(activeScene);
         updateToggleControl();
         openDialog(playerDialog);
         musicFrame.src = musicUrl;
-        scheduleNextScene();
+        scheduleNextScene(runId);
       };
 
       const stopSlideshow = () => {
+        slideshowRun += 1;
         slideshowPlaying = false;
         clearTimeout(sceneTimer);
         slideVideo.pause();
@@ -1661,9 +1666,11 @@
       const toggleSlideshow = () => {
         slideshowPlaying = !slideshowPlaying;
         if (slideshowPlaying) {
+          slideshowRun += 1;
           musicFrame.src = musicUrl;
-          scheduleNextScene();
+          scheduleNextScene(slideshowRun);
         } else {
+          slideshowRun += 1;
           clearTimeout(sceneTimer);
           slideVideo.pause();
         }
@@ -1671,11 +1678,12 @@
       };
 
       const replaySlideshow = () => {
+        slideshowRun += 1;
         slideshowPlaying = true;
         activeScene = 0;
         renderScene(activeScene);
         musicFrame.src = musicUrl;
-        scheduleNextScene();
+        scheduleNextScene(slideshowRun);
         updateToggleControl();
       };
 
