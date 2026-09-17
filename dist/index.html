@@ -1,0 +1,1207 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>O Filme de Nos Dois</title>
+    <meta
+      name="description"
+      content="Uma pagina-presente em formato de tela de filme para celebrar uma historia de amor."
+    />
+    <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+    <style>
+      :root {
+        color-scheme: dark;
+        --bg: #050506;
+        --panel: rgba(16, 16, 18, 0.72);
+        --panel-strong: rgba(10, 10, 11, 0.92);
+        --text: #fff7f2;
+        --muted: #c8bdba;
+        --soft: #8d8586;
+        --line: rgba(255, 255, 255, 0.14);
+        --red: #e50914;
+        --rose: #f6a7b7;
+        --gold: #ffd8a8;
+        --shadow: 0 24px 70px rgba(0, 0, 0, 0.44);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        background: var(--bg);
+        color: var(--text);
+        font-family:
+          Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+          "Segoe UI", sans-serif;
+        line-height: 1.5;
+      }
+
+      body::before {
+        position: fixed;
+        inset: 0;
+        z-index: -3;
+        pointer-events: none;
+        content: "";
+        background:
+          radial-gradient(circle at 78% 18%, rgba(229, 9, 20, 0.2), transparent 34rem),
+          radial-gradient(circle at 15% 95%, rgba(255, 216, 168, 0.1), transparent 28rem),
+          #050506;
+      }
+
+      button,
+      input,
+      textarea {
+        font: inherit;
+      }
+
+      button {
+        cursor: pointer;
+      }
+
+      .app {
+        min-height: 100vh;
+        overflow: hidden;
+      }
+
+      .topbar {
+        position: fixed;
+        top: 0;
+        right: 0;
+        left: 0;
+        z-index: 10;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        padding: 1rem clamp(1rem, 4vw, 3.25rem);
+        background: linear-gradient(180deg, rgba(0, 0, 0, 0.84), rgba(0, 0, 0, 0));
+      }
+
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 0.72rem;
+        min-width: 0;
+        color: var(--text);
+        text-decoration: none;
+      }
+
+      .brand-mark {
+        display: grid;
+        width: 2.25rem;
+        height: 2.25rem;
+        place-items: center;
+        border-radius: 0.42rem;
+        background: var(--red);
+        box-shadow: 0 10px 32px rgba(229, 9, 20, 0.38);
+        color: white;
+        font-weight: 900;
+      }
+
+      .brand-name {
+        overflow: hidden;
+        font-size: 1.08rem;
+        font-weight: 850;
+        letter-spacing: 0;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .nav {
+        display: flex;
+        align-items: center;
+        gap: clamp(0.65rem, 2.2vw, 1.35rem);
+        color: rgba(255, 247, 242, 0.76);
+        font-size: 0.95rem;
+      }
+
+      .nav a {
+        color: inherit;
+        text-decoration: none;
+      }
+
+      .nav a:hover {
+        color: var(--text);
+      }
+
+      .share-button {
+        min-height: 2.5rem;
+        border: 1px solid rgba(255, 255, 255, 0.22);
+        border-radius: 999px;
+        padding: 0 1rem;
+        background: rgba(255, 255, 255, 0.09);
+        color: var(--text);
+        transition:
+          transform 180ms ease,
+          border-color 180ms ease,
+          background 180ms ease;
+      }
+
+      .share-button:hover {
+        transform: translateY(-1px);
+        border-color: rgba(255, 255, 255, 0.4);
+        background: rgba(255, 255, 255, 0.14);
+      }
+
+      .hero {
+        position: relative;
+        display: grid;
+        min-height: 92vh;
+        padding: 7.25rem clamp(1rem, 4vw, 3.25rem) 3rem;
+        align-items: end;
+      }
+
+      .hero-backdrop {
+        position: absolute;
+        inset: 0;
+        z-index: -2;
+      }
+
+      .hero-backdrop img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        opacity: 0.78;
+        filter: saturate(1.05) contrast(1.05);
+      }
+
+      .hero-backdrop::after {
+        position: absolute;
+        inset: 0;
+        content: "";
+        background:
+          linear-gradient(90deg, rgba(0, 0, 0, 0.96), rgba(0, 0, 0, 0.58) 38%, rgba(0, 0, 0, 0.18)),
+          linear-gradient(0deg, #050506 0%, rgba(5, 5, 6, 0.82) 9%, rgba(5, 5, 6, 0.08) 48%),
+          linear-gradient(180deg, rgba(0, 0, 0, 0.72), rgba(0, 0, 0, 0) 26%);
+      }
+
+      .hero-grid {
+        display: grid;
+        grid-template-columns: minmax(0, 1.04fr) minmax(18rem, 0.62fr);
+        gap: clamp(1.3rem, 4vw, 4.5rem);
+        align-items: end;
+        width: min(1180px, 100%);
+      }
+
+      .eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        min-height: 2rem;
+        width: fit-content;
+        margin: 0 0 1rem;
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        border-radius: 999px;
+        padding: 0.3rem 0.78rem;
+        background: rgba(255, 255, 255, 0.09);
+        color: rgba(255, 247, 242, 0.86);
+        font-size: 0.9rem;
+        font-weight: 700;
+        backdrop-filter: blur(16px);
+      }
+
+      .eyebrow::before {
+        display: inline-block;
+        width: 0.52rem;
+        height: 0.52rem;
+        border-radius: 999px;
+        background: var(--red);
+        box-shadow: 0 0 18px rgba(229, 9, 20, 0.86);
+        content: "";
+      }
+
+      h1 {
+        width: min(10ch, 100%);
+        margin: 0;
+        font-size: clamp(3.3rem, 8vw, 7.8rem);
+        line-height: 0.88;
+        letter-spacing: 0;
+        text-transform: uppercase;
+      }
+
+      .meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.58rem;
+        margin: 1.2rem 0 0;
+        padding: 0;
+        list-style: none;
+        color: rgba(255, 247, 242, 0.84);
+        font-size: 0.98rem;
+        font-weight: 700;
+      }
+
+      .meta li {
+        min-height: 2rem;
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        border-radius: 0.4rem;
+        padding: 0.26rem 0.58rem;
+        background: rgba(0, 0, 0, 0.32);
+      }
+
+      .synopsis {
+        width: min(44rem, 100%);
+        margin: 1.2rem 0 0;
+        color: rgba(255, 247, 242, 0.86);
+        font-size: clamp(1rem, 1.45vw, 1.25rem);
+      }
+
+      .actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.8rem;
+        margin-top: 1.55rem;
+      }
+
+      .primary,
+      .secondary {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.62rem;
+        min-height: 3.05rem;
+        border: 0;
+        border-radius: 0.38rem;
+        padding: 0 1.1rem;
+        font-weight: 850;
+        transition:
+          transform 180ms ease,
+          background 180ms ease,
+          color 180ms ease;
+      }
+
+      .primary {
+        background: var(--text);
+        color: #09090b;
+      }
+
+      .primary:hover,
+      .secondary:hover {
+        transform: translateY(-1px);
+      }
+
+      .secondary {
+        background: rgba(255, 255, 255, 0.17);
+        color: var(--text);
+      }
+
+      .poster-card {
+        justify-self: end;
+        width: min(25rem, 100%);
+      }
+
+      .poster-frame {
+        position: relative;
+        overflow: hidden;
+        aspect-ratio: 2 / 3;
+        border: 1px solid rgba(255, 255, 255, 0.16);
+        border-radius: 0.72rem;
+        background: #0f0f11;
+        box-shadow: var(--shadow);
+      }
+
+      .poster-frame img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .poster-frame::after {
+        position: absolute;
+        inset: 0;
+        content: "";
+        background: linear-gradient(180deg, rgba(0, 0, 0, 0) 38%, rgba(0, 0, 0, 0.72));
+      }
+
+      .poster-caption {
+        position: absolute;
+        right: 1.1rem;
+        bottom: 1rem;
+        left: 1.1rem;
+        z-index: 1;
+      }
+
+      .poster-caption strong {
+        display: block;
+        font-size: 1.6rem;
+        line-height: 1;
+        text-transform: uppercase;
+      }
+
+      .poster-caption span {
+        color: rgba(255, 247, 242, 0.72);
+        font-size: 0.95rem;
+        font-weight: 750;
+      }
+
+      main {
+        background: #050506;
+      }
+
+      .section {
+        width: min(1180px, calc(100% - 2rem));
+        margin: 0 auto;
+        padding: 3rem 0;
+      }
+
+      .section-header {
+        display: flex;
+        align-items: end;
+        justify-content: space-between;
+        gap: 1rem;
+        margin-bottom: 1.1rem;
+      }
+
+      .section h2 {
+        margin: 0;
+        font-size: clamp(1.55rem, 2.6vw, 2.35rem);
+        letter-spacing: 0;
+      }
+
+      .section-kicker {
+        margin: 0;
+        color: var(--soft);
+        font-size: 0.95rem;
+        font-weight: 700;
+      }
+
+      .episodes {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 1rem;
+      }
+
+      .episode {
+        position: relative;
+        overflow: hidden;
+        min-height: 13.4rem;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 0.55rem;
+        background:
+          linear-gradient(155deg, rgba(229, 9, 20, 0.28), rgba(255, 216, 168, 0.06)),
+          #111114;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.18);
+      }
+
+      .episode::before {
+        position: absolute;
+        inset: 0;
+        opacity: 0.48;
+        content: "";
+        background-image: var(--episode-image);
+        background-size: cover;
+        background-position: center;
+        filter: saturate(0.9);
+      }
+
+      .episode::after {
+        position: absolute;
+        inset: 0;
+        content: "";
+        background: linear-gradient(180deg, rgba(0, 0, 0, 0.06), rgba(0, 0, 0, 0.84));
+      }
+
+      .episode-content {
+        position: absolute;
+        right: 1rem;
+        bottom: 1rem;
+        left: 1rem;
+        z-index: 1;
+      }
+
+      .episode time {
+        display: block;
+        margin-bottom: 0.38rem;
+        color: var(--gold);
+        font-size: 0.86rem;
+        font-weight: 850;
+      }
+
+      .episode h3 {
+        margin: 0;
+        font-size: 1.05rem;
+        line-height: 1.16;
+      }
+
+      .episode p {
+        display: -webkit-box;
+        overflow: hidden;
+        margin: 0.45rem 0 0;
+        color: rgba(255, 247, 242, 0.74);
+        font-size: 0.92rem;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 3;
+      }
+
+      .quote-band {
+        display: grid;
+        grid-template-columns: minmax(0, 0.95fr) minmax(17rem, 0.55fr);
+        gap: clamp(1rem, 4vw, 3rem);
+        align-items: center;
+        width: min(1180px, calc(100% - 2rem));
+        margin: 1rem auto 0;
+        padding: clamp(1.2rem, 4vw, 2.2rem) 0 4rem;
+      }
+
+      blockquote {
+        margin: 0;
+        color: #fff9f5;
+        font-size: clamp(1.8rem, 4.4vw, 4.1rem);
+        font-weight: 880;
+        line-height: 1.02;
+      }
+
+      .stats {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 0.75rem;
+      }
+
+      .stat {
+        min-height: 7rem;
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        border-radius: 0.55rem;
+        padding: 1rem;
+        background: rgba(255, 255, 255, 0.06);
+      }
+
+      .stat strong {
+        display: block;
+        color: var(--rose);
+        font-size: 1.65rem;
+        line-height: 1;
+      }
+
+      .stat span {
+        display: block;
+        margin-top: 0.5rem;
+        color: rgba(255, 247, 242, 0.76);
+        font-size: 0.9rem;
+      }
+
+      .studio {
+        border-top: 1px solid rgba(255, 255, 255, 0.09);
+        background:
+          linear-gradient(180deg, rgba(255, 255, 255, 0.035), rgba(255, 255, 255, 0)),
+          #070708;
+      }
+
+      .studio-grid {
+        display: grid;
+        grid-template-columns: minmax(0, 0.85fr) minmax(20rem, 1.15fr);
+        gap: clamp(1rem, 4vw, 3rem);
+        align-items: start;
+      }
+
+      .studio-copy {
+        position: sticky;
+        top: 6rem;
+      }
+
+      .studio-copy p {
+        margin: 0.75rem 0 0;
+        color: var(--muted);
+      }
+
+      .editor {
+        display: grid;
+        gap: 1rem;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 0.75rem;
+        padding: clamp(1rem, 2vw, 1.35rem);
+        background: var(--panel);
+        box-shadow: var(--shadow);
+        backdrop-filter: blur(18px);
+      }
+
+      .field-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0.85rem;
+      }
+
+      label {
+        display: grid;
+        gap: 0.35rem;
+        color: rgba(255, 247, 242, 0.74);
+        font-size: 0.9rem;
+        font-weight: 800;
+      }
+
+      input,
+      textarea {
+        width: 100%;
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 0.42rem;
+        padding: 0.76rem 0.82rem;
+        background: rgba(0, 0, 0, 0.28);
+        color: var(--text);
+        outline: none;
+      }
+
+      textarea {
+        min-height: 7rem;
+        resize: vertical;
+      }
+
+      input:focus,
+      textarea:focus {
+        border-color: rgba(246, 167, 183, 0.78);
+        box-shadow: 0 0 0 3px rgba(229, 9, 20, 0.2);
+      }
+
+      .editor-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+      }
+
+      .editor-actions input[type="file"] {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        opacity: 0;
+      }
+
+      .tool-button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 2.75rem;
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        border-radius: 0.42rem;
+        padding: 0 0.9rem;
+        background: rgba(255, 255, 255, 0.08);
+        color: var(--text);
+        font-weight: 800;
+      }
+
+      .tool-button:hover {
+        background: rgba(255, 255, 255, 0.13);
+      }
+
+      .toast {
+        position: fixed;
+        right: 1rem;
+        bottom: 1rem;
+        z-index: 30;
+        max-width: min(24rem, calc(100vw - 2rem));
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        border-radius: 0.5rem;
+        padding: 0.8rem 0.95rem;
+        background: rgba(12, 12, 14, 0.94);
+        box-shadow: var(--shadow);
+        color: var(--text);
+        opacity: 0;
+        transform: translateY(1rem);
+        transition:
+          opacity 180ms ease,
+          transform 180ms ease;
+        pointer-events: none;
+      }
+
+      .toast.visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      dialog {
+        width: min(58rem, calc(100% - 2rem));
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        border-radius: 0.8rem;
+        padding: 0;
+        background: #08080a;
+        color: var(--text);
+        box-shadow: var(--shadow);
+      }
+
+      dialog::backdrop {
+        background: rgba(0, 0, 0, 0.78);
+        backdrop-filter: blur(10px);
+      }
+
+      .player {
+        overflow: hidden;
+      }
+
+      .player-screen {
+        position: relative;
+        min-height: min(52vh, 26rem);
+        background: #000;
+      }
+
+      .player-screen img {
+        width: 100%;
+        height: 100%;
+        min-height: min(52vh, 26rem);
+        object-fit: cover;
+        opacity: 0.62;
+      }
+
+      .player-screen::after {
+        position: absolute;
+        inset: 0;
+        content: "";
+        background: linear-gradient(180deg, rgba(0, 0, 0, 0.04), rgba(0, 0, 0, 0.72));
+      }
+
+      .player-title {
+        position: absolute;
+        right: 1.2rem;
+        bottom: 1.2rem;
+        left: 1.2rem;
+        z-index: 1;
+      }
+
+      .player-title strong {
+        display: block;
+        font-size: clamp(1.7rem, 4vw, 3rem);
+        line-height: 1;
+      }
+
+      .player-title span {
+        display: block;
+        margin-top: 0.4rem;
+        color: rgba(255, 247, 242, 0.76);
+      }
+
+      .player-controls {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        padding: 1rem;
+      }
+
+      .progress {
+        flex: 1;
+        height: 0.34rem;
+        overflow: hidden;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.18);
+      }
+
+      .progress span {
+        display: block;
+        width: 74%;
+        height: 100%;
+        border-radius: inherit;
+        background: var(--red);
+      }
+
+      .close {
+        min-width: 2.5rem;
+        min-height: 2.5rem;
+        border: 0;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.13);
+        color: white;
+        font-size: 1.3rem;
+      }
+
+      footer {
+        border-top: 1px solid rgba(255, 255, 255, 0.09);
+        padding: 1.5rem 1rem 2rem;
+        color: var(--soft);
+        text-align: center;
+      }
+
+      @media (max-width: 940px) {
+        .hero {
+          min-height: auto;
+          padding-top: 6rem;
+        }
+
+        .hero-grid,
+        .quote-band,
+        .studio-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .poster-card {
+          justify-self: start;
+          width: min(19rem, 78vw);
+        }
+
+        .episodes {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .studio-copy {
+          position: static;
+        }
+      }
+
+      @media (max-width: 680px) {
+        .topbar {
+          align-items: flex-start;
+        }
+
+        .nav {
+          display: none;
+        }
+
+        .share-button {
+          min-height: 2.3rem;
+          padding: 0 0.75rem;
+          font-size: 0.9rem;
+        }
+
+        h1 {
+          width: min(9ch, 100%);
+          font-size: clamp(2.8rem, 16vw, 4.7rem);
+        }
+
+        .actions {
+          display: grid;
+          grid-template-columns: 1fr;
+        }
+
+        .primary,
+        .secondary {
+          width: 100%;
+        }
+
+        .episodes,
+        .stats,
+        .field-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .episode {
+          min-height: 12rem;
+        }
+
+        .quote-band {
+          padding-bottom: 2.6rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app">
+      <header class="topbar" aria-label="Topo do site">
+        <a class="brand" href="#inicio" aria-label="Ir para o inicio">
+          <span class="brand-mark" aria-hidden="true">M</span>
+          <span class="brand-name">MyNetFlix</span>
+        </a>
+        <nav class="nav" aria-label="Navegacao">
+          <a href="#capitulos">Capitulos</a>
+          <a href="#memorias">Memorias</a>
+          <a href="#editar">Editar</a>
+        </nav>
+        <button class="share-button" type="button" data-share>Compartilhar</button>
+      </header>
+
+      <section class="hero" id="inicio">
+        <div class="hero-backdrop" aria-hidden="true">
+          <img id="backdrop" src="assets/capa.jpg" alt="" />
+        </div>
+
+        <div class="hero-grid">
+          <div>
+            <p class="eyebrow" data-bind="tagline">Original da nossa historia</p>
+            <h1 data-bind="title">O Filme de Nos Dois</h1>
+            <ul class="meta" aria-label="Detalhes do filme">
+              <li data-bind="year">Desde 2019</li>
+              <li>Romance real</li>
+              <li data-bind="rating">Livre para sonhar</li>
+              <li data-bind="duration">Para sempre</li>
+            </ul>
+            <p class="synopsis" data-bind="synopsis">
+              Dois protagonistas se encontram no meio da rotina e descobrem que amor de verdade
+              tambem tem cenas simples: cafe dividido, risadas fora de hora, planos rabiscados
+              juntos e a certeza de escolher a mesma pessoa todos os dias.
+            </p>
+            <div class="actions">
+              <button class="primary" type="button" data-open-player>
+                <span aria-hidden="true">▶</span>
+                Assistir agora
+              </button>
+              <button class="secondary" type="button" data-scroll-edit>
+                <span aria-hidden="true">＋</span>
+                Personalizar
+              </button>
+            </div>
+          </div>
+
+          <aside class="poster-card" aria-label="Capa do filme">
+            <div class="poster-frame">
+              <img id="poster" src="assets/poster.jpg" alt="Capa do filme do casal" />
+              <div class="poster-caption">
+                <strong data-bind="posterTitle">Nos Dois</strong>
+                <span data-bind="posterSubtitle">Uma historia em muitos capitulos</span>
+              </div>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <main>
+        <section class="section" id="capitulos">
+          <div class="section-header">
+            <div>
+              <p class="section-kicker">Temporada atual</p>
+              <h2>Capitulos favoritos</h2>
+            </div>
+          </div>
+
+          <div class="episodes" aria-label="Capitulos do relacionamento">
+            <article class="episode">
+              <div class="episode-content">
+                <time data-bind="episodeOneTime">Episodio 1</time>
+                <h3 data-bind="episodeOneTitle">Quando tudo comecou</h3>
+                <p data-bind="episodeOneText">Aquela fase em que qualquer mensagem mudava o dia inteiro.</p>
+              </div>
+            </article>
+            <article class="episode">
+              <div class="episode-content">
+                <time data-bind="episodeTwoTime">Episodio 2</time>
+                <h3 data-bind="episodeTwoTitle">Nosso sim</h3>
+                <p data-bind="episodeTwoText">O capitulo em que promessa virou casa, rotina e futuro.</p>
+              </div>
+            </article>
+            <article class="episode">
+              <div class="episode-content">
+                <time data-bind="episodeThreeTime">Episodio 3</time>
+                <h3 data-bind="episodeThreeTitle">As cenas simples</h3>
+                <p data-bind="episodeThreeText">Domingos, viagens, piadas internas e os pequenos rituais que so voces entendem.</p>
+              </div>
+            </article>
+            <article class="episode">
+              <div class="episode-content">
+                <time data-bind="episodeFourTime">Episodio final?</time>
+                <h3 data-bind="episodeFourTitle">Continua...</h3>
+                <p data-bind="episodeFourText">Porque a melhor parte dessa historia ainda esta sendo escrita.</p>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section class="quote-band" id="memorias" aria-label="Resumo da historia">
+          <blockquote data-bind="quote">
+            Amor bom e esse: parece filme, mas melhora quando a camera desliga.
+          </blockquote>
+          <div class="stats" aria-label="Numeros da historia">
+            <div class="stat">
+              <strong data-bind="statOneNumber">∞</strong>
+              <span data-bind="statOneLabel">planos pela frente</span>
+            </div>
+            <div class="stat">
+              <strong data-bind="statTwoNumber">2</strong>
+              <span data-bind="statTwoLabel">protagonistas</span>
+            </div>
+            <div class="stat">
+              <strong data-bind="statThreeNumber">1</strong>
+              <span data-bind="statThreeLabel">historia favorita</span>
+            </div>
+          </div>
+        </section>
+
+        <section class="studio" id="editar">
+          <div class="section studio-grid">
+            <div class="studio-copy">
+              <p class="section-kicker">Modo diretor</p>
+              <h2>Deixe com a cara de voces</h2>
+              <p>
+                Troque capa, poster e texto. O teste fica guardado neste navegador; para todo mundo
+                ver as fotos, envie `capa.jpg` e `poster.jpg` para a pasta `dist/assets` no GitHub.
+              </p>
+            </div>
+
+            <form class="editor" aria-label="Editor da historia">
+              <div class="editor-actions">
+                <label class="tool-button">
+                  Trocar capa
+                  <input type="file" accept="image/*" data-file="backdrop" />
+                </label>
+                <label class="tool-button">
+                  Trocar poster
+                  <input type="file" accept="image/*" data-file="poster" />
+                </label>
+                <button class="tool-button" type="button" data-reset>Restaurar</button>
+              </div>
+
+              <div class="field-grid">
+                <label>
+                  Titulo
+                  <input data-edit="title" maxlength="44" />
+                </label>
+                <label>
+                  Chamada
+                  <input data-edit="tagline" maxlength="52" />
+                </label>
+                <label>
+                  Desde
+                  <input data-edit="year" maxlength="24" />
+                </label>
+                <label>
+                  Duracao
+                  <input data-edit="duration" maxlength="24" />
+                </label>
+              </div>
+
+              <label>
+                Sinopse
+                <textarea data-edit="synopsis" maxlength="420"></textarea>
+              </label>
+
+              <label>
+                Frase principal
+                <textarea data-edit="quote" maxlength="180"></textarea>
+              </label>
+
+              <div class="field-grid">
+                <label>
+                  Capitulo 1
+                  <input data-edit="episodeOneTitle" maxlength="38" />
+                </label>
+                <label>
+                  Texto 1
+                  <input data-edit="episodeOneText" maxlength="96" />
+                </label>
+                <label>
+                  Capitulo 2
+                  <input data-edit="episodeTwoTitle" maxlength="38" />
+                </label>
+                <label>
+                  Texto 2
+                  <input data-edit="episodeTwoText" maxlength="96" />
+                </label>
+                <label>
+                  Capitulo 3
+                  <input data-edit="episodeThreeTitle" maxlength="38" />
+                </label>
+                <label>
+                  Texto 3
+                  <input data-edit="episodeThreeText" maxlength="96" />
+                </label>
+                <label>
+                  Capitulo 4
+                  <input data-edit="episodeFourTitle" maxlength="38" />
+                </label>
+                <label>
+                  Texto 4
+                  <input data-edit="episodeFourText" maxlength="96" />
+                </label>
+              </div>
+            </form>
+          </div>
+        </section>
+      </main>
+
+      <footer>
+        Feito para uma historia que nao cabe em algoritmo.
+      </footer>
+    </div>
+
+    <dialog id="playerDialog" aria-label="Player do filme">
+      <div class="player">
+        <div class="player-screen">
+          <img id="playerImage" src="assets/capa.jpg" alt="" />
+          <div class="player-title">
+            <strong data-bind="title">O Filme de Nos Dois</strong>
+            <span data-bind="synopsis">
+              Dois protagonistas se encontram no meio da rotina e descobrem que amor de verdade
+              tambem tem cenas simples.
+            </span>
+          </div>
+        </div>
+        <div class="player-controls">
+          <button class="close" type="button" data-close-player aria-label="Fechar">×</button>
+          <div class="progress" aria-hidden="true"><span></span></div>
+          <span aria-label="Tempo do filme">para sempre</span>
+        </div>
+      </div>
+    </dialog>
+
+    <div class="toast" role="status" aria-live="polite"></div>
+
+    <script>
+      const fallbackImages = {
+        backdrop: "assets/capa.svg",
+        poster: "assets/poster.svg",
+      };
+
+      const defaults = {
+        title: "O Filme de Nos Dois",
+        tagline: "Original da nossa historia",
+        year: "Desde 2019",
+        rating: "Livre para sonhar",
+        duration: "Para sempre",
+        synopsis:
+          "Dois protagonistas se encontram no meio da rotina e descobrem que amor de verdade tambem tem cenas simples: cafe dividido, risadas fora de hora, planos rabiscados juntos e a certeza de escolher a mesma pessoa todos os dias.",
+        posterTitle: "Nos Dois",
+        posterSubtitle: "Uma historia em muitos capitulos",
+        episodeOneTime: "Episodio 1",
+        episodeOneTitle: "Quando tudo comecou",
+        episodeOneText: "Aquela fase em que qualquer mensagem mudava o dia inteiro.",
+        episodeTwoTime: "Episodio 2",
+        episodeTwoTitle: "Nosso sim",
+        episodeTwoText: "O capitulo em que promessa virou casa, rotina e futuro.",
+        episodeThreeTime: "Episodio 3",
+        episodeThreeTitle: "As cenas simples",
+        episodeThreeText: "Domingos, viagens, piadas internas e os pequenos rituais que so voces entendem.",
+        episodeFourTime: "Episodio final?",
+        episodeFourTitle: "Continua...",
+        episodeFourText: "Porque a melhor parte dessa historia ainda esta sendo escrita.",
+        quote: "Amor bom e esse: parece filme, mas melhora quando a camera desliga.",
+        statOneNumber: "∞",
+        statOneLabel: "planos pela frente",
+        statTwoNumber: "2",
+        statTwoLabel: "protagonistas",
+        statThreeNumber: "1",
+        statThreeLabel: "historia favorita",
+      };
+
+      const storageKey = "mynetflix-story-v1";
+      const imageKey = "mynetflix-images-v1";
+      const bindTargets = [...document.querySelectorAll("[data-bind]")];
+      const editFields = [...document.querySelectorAll("[data-edit]")];
+      const toast = document.querySelector(".toast");
+      const backdrop = document.querySelector("#backdrop");
+      const poster = document.querySelector("#poster");
+      const playerImage = document.querySelector("#playerImage");
+      const dialog = document.querySelector("#playerDialog");
+
+      const readStorage = (key, fallback) => {
+        try {
+          return JSON.parse(localStorage.getItem(key)) || fallback;
+        } catch {
+          return fallback;
+        }
+      };
+
+      let story = { ...defaults, ...readStorage(storageKey, {}) };
+      let images = readStorage(imageKey, {});
+
+      const saveStory = () => {
+        localStorage.setItem(storageKey, JSON.stringify(story));
+      };
+
+      const saveImages = () => {
+        localStorage.setItem(imageKey, JSON.stringify(images));
+      };
+
+      const showToast = (message) => {
+        toast.textContent = message;
+        toast.classList.add("visible");
+        clearTimeout(showToast.timer);
+        showToast.timer = setTimeout(() => toast.classList.remove("visible"), 2400);
+      };
+
+      const updateEpisodeImages = () => {
+        const image = images.backdrop || fallbackImages.backdrop;
+        document.querySelectorAll(".episode").forEach((episode) => {
+          episode.style.setProperty("--episode-image", `url("${image}")`);
+        });
+      };
+
+      const render = () => {
+        bindTargets.forEach((node) => {
+          const key = node.dataset.bind;
+          node.textContent = story[key] || defaults[key] || "";
+        });
+
+        editFields.forEach((field) => {
+          field.value = story[field.dataset.edit] || "";
+        });
+
+        backdrop.src = images.backdrop || "assets/capa.jpg";
+        poster.src = images.poster || "assets/poster.jpg";
+        playerImage.src = images.backdrop || "assets/capa.jpg";
+        updateEpisodeImages();
+      };
+
+      [backdrop, playerImage].forEach((image) => {
+        image.addEventListener("error", () => {
+          if (!image.src.endsWith("capa.svg")) image.src = fallbackImages.backdrop;
+        });
+      });
+
+      poster.addEventListener("error", () => {
+        if (!poster.src.endsWith("poster.svg")) poster.src = fallbackImages.poster;
+      });
+
+      editFields.forEach((field) => {
+        field.addEventListener("input", () => {
+          story[field.dataset.edit] = field.value;
+          if (field.dataset.edit === "title") {
+            story.posterTitle = field.value.replace(/^O\s+/i, "").slice(0, 24) || defaults.posterTitle;
+          }
+          saveStory();
+          render();
+        });
+      });
+
+      document.querySelectorAll("[data-file]").forEach((field) => {
+        field.addEventListener("change", () => {
+          const file = field.files && field.files[0];
+          if (!file) return;
+
+          const reader = new FileReader();
+          reader.onload = () => {
+            images[field.dataset.file] = reader.result;
+            saveImages();
+            render();
+            showToast("Foto atualizada neste navegador.");
+          };
+          reader.readAsDataURL(file);
+        });
+      });
+
+      document.querySelector("[data-reset]").addEventListener("click", () => {
+        localStorage.removeItem(storageKey);
+        localStorage.removeItem(imageKey);
+        story = { ...defaults };
+        images = {};
+        render();
+        showToast("Versao inicial restaurada.");
+      });
+
+      document.querySelector("[data-scroll-edit]").addEventListener("click", () => {
+        document.querySelector("#editar").scrollIntoView({ behavior: "smooth", block: "start" });
+      });
+
+      document.querySelector("[data-open-player]").addEventListener("click", () => {
+        if (typeof dialog.showModal === "function") {
+          dialog.showModal();
+        }
+      });
+
+      document.querySelector("[data-close-player]").addEventListener("click", () => {
+        dialog.close();
+      });
+
+      document.querySelector("[data-share]").addEventListener("click", async () => {
+        const shareData = {
+          title: story.title,
+          text: "Olha o filme da nossa historia.",
+          url: window.location.href,
+        };
+
+        try {
+          if (navigator.share) {
+            await navigator.share(shareData);
+          } else {
+            await navigator.clipboard.writeText(window.location.href);
+            showToast("Link copiado.");
+          }
+        } catch {
+          showToast("Link pronto para compartilhar.");
+        }
+      });
+
+      render();
+    </script>
+  </body>
+</html>
