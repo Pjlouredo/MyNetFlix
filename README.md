@@ -3,4 +3,4 @@
 Uma experiencia romantica em estilo Netflix, feita para contar a historia de um casal.
 
 As fotos da historia ficam em `dist/assets/foto-01.jpg` ate `foto-10.jpg`, a capa fica em `dist/assets/capa.jpg` e o video fica em `dist/assets/relato.mp4`.
-O botao Assistir abre uma apresentacao cinematografica com as 10 cenas. Para tocar a trilha em audio, coloque um arquivo autorizado em `dist/assets/all-star.mp3`.
+O botao Assistir abre uma apresentacao cinematografica com as 10 cenas e toca o arquivo autorizado `dist/assets/all-star.mp3` durante o slideshow.
