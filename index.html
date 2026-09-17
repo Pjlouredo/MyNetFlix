@@ -418,6 +418,13 @@
         transition: transform 180ms ease;
       }
 
+      .poster-card video {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
       .poster-card:hover img,
       .poster-card:focus-visible img {
         transform: scale(1.04);
@@ -810,6 +817,12 @@
         object-fit: cover;
       }
 
+      .episode-thumb video {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
       .episode-play {
         position: absolute;
         top: 50%;
@@ -956,6 +969,241 @@
         background: var(--red);
       }
 
+      .cinematic-player {
+        position: relative;
+        width: 100%;
+        min-height: 100%;
+        overflow: hidden;
+        background: #020202;
+      }
+
+      .cinematic-topbar {
+        position: absolute;
+        z-index: 5;
+        top: 0;
+        right: 0;
+        left: 0;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: max(18px, env(safe-area-inset-top)) 18px 18px;
+        background: linear-gradient(180deg, rgba(0, 0, 0, 0.86), transparent);
+      }
+
+      .cinematic-heading {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        color: #f4f4f4;
+        font-size: 11px;
+        font-weight: 900;
+        letter-spacing: 1.7px;
+      }
+
+      .cinematic-heading strong {
+        color: var(--red);
+        font-size: 22px;
+        letter-spacing: -2px;
+      }
+
+      .cinematic-close {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 39px;
+        height: 39px;
+        border-radius: 50%;
+        background: rgba(29, 29, 29, 0.82);
+        color: #fff;
+        font-size: 29px;
+        font-weight: 300;
+        line-height: 1;
+      }
+
+      .cinematic-stage {
+        position: relative;
+        min-height: 100vh;
+        overflow: hidden;
+        background: #111;
+      }
+
+      .cinematic-stage img,
+      .cinematic-stage video {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center;
+        animation: cinematic-zoom 7s ease-in-out both;
+        filter: saturate(1.06) contrast(1.05);
+      }
+
+      .cinematic-stage.is-switching img:not([hidden]),
+      .cinematic-stage.is-switching video:not([hidden]) {
+        animation: cinematic-fade 650ms ease both, cinematic-zoom 7s ease-in-out both;
+      }
+
+      .cinematic-stage img[hidden],
+      .cinematic-stage video[hidden] {
+        display: none;
+      }
+
+      .cinematic-stage::before {
+        position: absolute;
+        z-index: 1;
+        inset: 0;
+        background:
+          linear-gradient(180deg, rgba(0, 0, 0, 0.12), transparent 34%, rgba(0, 0, 0, 0.9) 100%),
+          radial-gradient(ellipse at center, transparent 42%, rgba(0, 0, 0, 0.52) 100%);
+        content: "";
+        pointer-events: none;
+      }
+
+      .cinematic-stage::after {
+        position: absolute;
+        z-index: 1;
+        inset: 0;
+        background: repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.022) 0, rgba(255, 255, 255, 0.022) 1px, transparent 1px, transparent 4px);
+        content: "";
+        opacity: 0.18;
+        pointer-events: none;
+      }
+
+      .cinematic-caption {
+        position: absolute;
+        z-index: 2;
+        right: 22px;
+        bottom: 162px;
+        left: 22px;
+        max-width: 420px;
+      }
+
+      .cinematic-caption .scene-label {
+        display: block;
+        margin-bottom: 9px;
+        color: #f2f2f2;
+        font-size: 11px;
+        font-weight: 900;
+        letter-spacing: 1.8px;
+        text-transform: uppercase;
+      }
+
+      .cinematic-caption h2 {
+        margin: 0 0 8px;
+        color: #fff;
+        font-size: clamp(2rem, 9vw, 3.7rem);
+        font-weight: 900;
+        line-height: 0.98;
+        letter-spacing: -1.8px;
+        text-shadow: 0 2px 12px rgba(0, 0, 0, 0.65);
+      }
+
+      .cinematic-caption p {
+        max-width: 370px;
+        margin: 0;
+        color: #e3e3e3;
+        font-size: 15px;
+        line-height: 1.4;
+      }
+
+      .cinematic-controls {
+        position: absolute;
+        z-index: 4;
+        right: 18px;
+        bottom: 0;
+        left: 18px;
+        padding-bottom: max(18px, env(safe-area-inset-bottom));
+        color: #e8e8e8;
+      }
+
+      .cinematic-track-row {
+        display: flex;
+        align-items: center;
+        gap: 11px;
+        margin-bottom: 14px;
+      }
+
+      .cinematic-track {
+        flex: 1;
+        height: 4px;
+        overflow: hidden;
+        border-radius: 4px;
+        background: rgba(255, 255, 255, 0.35);
+      }
+
+      .cinematic-track span {
+        display: block;
+        width: 10%;
+        height: 100%;
+        background: var(--red);
+        transition: width 260ms ease;
+      }
+
+      .cinematic-track-row output {
+        min-width: 39px;
+        color: #ddd;
+        font-size: 12px;
+        text-align: right;
+      }
+
+      .cinematic-control-row {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+      }
+
+      .cinematic-control {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        min-height: 34px;
+        padding: 0;
+        background: transparent;
+        color: #fff;
+        font-size: 13px;
+        font-weight: 700;
+        white-space: nowrap;
+      }
+
+      .cinematic-control svg {
+        width: 22px;
+        height: 22px;
+        fill: none;
+        stroke: currentColor;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        stroke-width: 1.8;
+      }
+
+      .cinematic-music {
+        margin-left: auto;
+        overflow: hidden;
+        color: #bfc0c2;
+        font-size: 11px;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .music-frame {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        border: 0;
+        opacity: 0.01;
+        pointer-events: none;
+      }
+
+      @keyframes cinematic-zoom {
+        from { transform: scale(1.02); }
+        to { transform: scale(1.09); }
+      }
+
+      @keyframes cinematic-fade {
+        from { opacity: 0.2; }
+        to { opacity: 1; }
+      }
+
       .toast {
         position: fixed;
         z-index: 30;
@@ -1035,7 +1283,7 @@
 
       <main>
         <section class="featured" id="inicio" aria-label="Destaque">
-          <img src="assets/capa.jpg" alt="Foto do casal sentados juntos em um banco" />
+          <img src="assets/foto-10.jpg" alt="Foto do casal juntos" />
           <div class="featured-content">
             <div class="content-label">Uma historia Netflix</div>
             <h2>O Filme de<br />Nos Dois</h2>
@@ -1060,7 +1308,7 @@
           <div class="poster-row continue-card">
             <button class="poster-card" type="button" data-open-details>
               <span class="poster-image-wrap">
-                <img src="assets/capa.jpg" alt="Capitulo do casal na praca" />
+                <img src="assets/foto-01.jpg" alt="Foto do casal em um passeio" />
                 <span class="runtime">20 min</span>
                 <span class="progress" aria-hidden="true"><span></span></span>
               </span>
@@ -1068,7 +1316,7 @@
             </button>
             <button class="poster-card" type="button" data-open-details>
               <span class="poster-image-wrap">
-                <img src="assets/poster.jpg" alt="Capitulo do casal no parque" />
+                <img src="assets/foto-03.jpg" alt="Foto do casal em uma viagem" />
                 <span class="runtime">18 min</span>
                 <span class="progress" aria-hidden="true"><span style="width: 72%"></span></span>
               </span>
@@ -1076,8 +1324,7 @@
             </button>
             <button class="poster-card" type="button" data-open-details>
               <span class="poster-image-wrap">
-                <img src="https://picsum.photos/seed/mynetflix-continuar/600/420" alt="Imagem de referencia para substituir" />
-                <span class="placeholder-tag">Trocar depois</span>
+                <video src="assets/relato.mp4" muted playsinline autoplay loop preload="metadata" aria-label="Video de uma memoria do casal"></video>
                 <span class="runtime">22 min</span>
                 <span class="progress" aria-hidden="true"><span style="width: 26%"></span></span>
               </span>
@@ -1101,27 +1348,25 @@
           <div class="poster-row">
             <button class="poster-card" type="button" data-open-details>
               <span class="poster-image-wrap">
-                <img src="assets/poster.jpg" alt="Foto do casal de pe no parque" />
+                <img src="assets/foto-02.jpg" alt="Foto do casal com a familia" />
               </span>
               <h3>Nos Dois</h3>
             </button>
             <button class="poster-card" type="button" data-open-details>
               <span class="poster-image-wrap">
-                <img src="assets/capa.jpg" alt="Foto do casal a noite" />
+                <img src="assets/foto-04.jpg" alt="Foto do casal em um momento divertido" />
               </span>
               <h3>Para sempre</h3>
             </button>
             <button class="poster-card" type="button" data-open-details>
               <span class="poster-image-wrap">
-                <img src="https://picsum.photos/seed/mynetflix-lista/600/900" alt="Imagem de referencia para substituir" />
-                <span class="placeholder-tag">Trocar depois</span>
+                <img src="assets/foto-05.jpg" alt="Foto do casal em uma ocasiao especial" />
               </span>
               <h3>Proximo capitulo</h3>
             </button>
             <button class="poster-card" type="button" data-open-details>
               <span class="poster-image-wrap">
-                <img src="https://picsum.photos/seed/mynetflix-viagem/600/900" alt="Imagem de referencia para substituir" />
-                <span class="placeholder-tag">Trocar depois</span>
+                <img src="assets/foto-07.jpg" alt="Foto do casal em um passeio" />
               </span>
               <h3>Uma viagem a dois</h3>
             </button>
@@ -1132,27 +1377,25 @@
           <div class="section-header">
             <div>
               <p>Porque voces assistiram a O Filme de Nos Dois</p>
-              <h2>Titulos semelhantes</h2>
+              <h2>Outras memorias</h2>
             </div>
           </div>
           <div class="poster-row">
             <button class="poster-card" type="button" data-open-details>
               <span class="poster-image-wrap">
-                <img src="https://picsum.photos/seed/mynetflix-encontro/600/900" alt="Imagem de referencia para substituir" />
-                <span class="placeholder-tag">Trocar depois</span>
+                <img src="assets/foto-08.jpg" alt="Foto do casal em casa" />
               </span>
               <h3>Nosso encontro</h3>
             </button>
             <button class="poster-card" type="button" data-open-details>
               <span class="poster-image-wrap">
-                <img src="assets/poster.jpg" alt="Foto do casal no parque" />
+                <img src="assets/foto-09.jpg" alt="Foto do casal em um momento antigo" />
               </span>
               <h3>Amor em cena</h3>
             </button>
             <button class="poster-card" type="button" data-open-details>
               <span class="poster-image-wrap">
-                <img src="https://picsum.photos/seed/mynetflix-futuro/600/900" alt="Imagem de referencia para substituir" />
-                <span class="placeholder-tag">Trocar depois</span>
+                <img src="assets/foto-03.jpg" alt="Foto do casal em uma viagem" />
               </span>
               <h3>Planos pela frente</h3>
             </button>
@@ -1183,7 +1426,7 @@
     <dialog class="details-dialog" id="detailsDialog" aria-label="Detalhes do filme">
       <div class="details-sheet">
         <div class="detail-visual">
-          <img src="assets/capa.jpg" alt="Foto do casal sentados juntos" />
+          <img src="assets/foto-10.jpg" alt="Foto do casal juntos" />
           <button class="close-button" type="button" data-close-details aria-label="Fechar">&times;</button>
         </div>
         <div class="detail-body">
@@ -1226,7 +1469,7 @@
 
           <div class="detail-tabs" role="tablist" aria-label="Conteudo do filme">
             <button class="detail-tab is-active" type="button" role="tab">Episodios</button>
-            <button class="detail-tab" type="button" role="tab" data-toast="Os titulos semelhantes estao na tela inicial.">Titulos semelhantes</button>
+            <button class="detail-tab" type="button" role="tab" data-toast="As outras memorias estao na tela inicial.">Outras memorias</button>
           </div>
           <select class="season-select" aria-label="Temporada">
             <option>Temporada 1</option>
@@ -1235,7 +1478,7 @@
           <div class="episode-list">
             <article class="episode-row">
               <button class="episode-thumb" type="button" data-open-player aria-label="Assistir episodio 1">
-                <img src="assets/poster.jpg" alt="Foto do casal no parque" />
+                <img src="assets/foto-02.jpg" alt="Foto do casal com a familia" />
                 <span class="episode-play" aria-hidden="true"><span></span></span>
               </button>
               <div class="episode-copy">
@@ -1248,8 +1491,7 @@
             </article>
             <article class="episode-row">
               <button class="episode-thumb" type="button" data-open-player aria-label="Assistir episodio 2">
-                <img src="https://picsum.photos/seed/mynetflix-episodio/600/420" alt="Imagem de referencia para substituir" />
-                <span class="placeholder-tag">Trocar depois</span>
+                <video src="assets/relato.mp4" muted playsinline autoplay loop preload="metadata" aria-label="Video de uma memoria do casal"></video>
                 <span class="episode-play" aria-hidden="true"><span></span></span>
               </button>
               <div class="episode-copy">
@@ -1266,21 +1508,38 @@
     </dialog>
 
     <dialog class="player-dialog" id="playerDialog" aria-label="Player do filme">
-      <div class="player-sheet">
-        <div class="player-card">
-          <div class="player-screen">
-            <img src="assets/capa.jpg" alt="Foto do casal" />
-            <div class="player-title">
-              <strong>O Filme de Nos Dois</strong>
-              <span>Uma historia real, com novos capitulos para sempre.</span>
-            </div>
-          </div>
-          <div class="player-controls">
-            <button class="close-button" type="button" data-close-player aria-label="Fechar">&times;</button>
-            <div class="player-progress" aria-hidden="true"><span></span></div>
-            <span>para sempre</span>
+      <div class="cinematic-player">
+        <div class="cinematic-topbar">
+          <div class="cinematic-heading"><strong>N</strong> O FILME DE NOS DOIS</div>
+          <button class="cinematic-close" type="button" data-close-player aria-label="Fechar">&times;</button>
+        </div>
+        <div class="cinematic-stage" id="cinematicStage">
+          <img id="slideImage" src="assets/foto-10.jpg" alt="Foto do casal juntos" />
+          <video id="slideVideo" playsinline muted preload="metadata" hidden></video>
+          <div class="cinematic-caption">
+            <span class="scene-label" id="sceneLabel">Cena 1</span>
+            <h2 id="sceneTitle">O comeco de tudo</h2>
+            <p id="sceneDescription">Uma historia feita de encontros, escolhas e muitos momentos so nossos.</p>
           </div>
         </div>
+        <div class="cinematic-controls">
+          <div class="cinematic-track-row">
+            <div class="cinematic-track" aria-hidden="true"><span id="sceneProgress"></span></div>
+            <output id="sceneCounter" aria-label="Cena atual">1 / 10</output>
+          </div>
+          <div class="cinematic-control-row">
+            <button class="cinematic-control" type="button" data-toggle-slide aria-label="Pausar apresentacao">
+              <svg id="toggleIcon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14M16 5v14"></path></svg>
+              <span id="toggleLabel">Pausar</span>
+            </button>
+            <button class="cinematic-control" type="button" data-replay aria-label="Recomecar apresentacao">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11a8 8 0 1 1 2.3 5.7"></path><path d="M4 5v6h6"></path></svg>
+              <span>Recomecar</span>
+            </button>
+            <span class="cinematic-music">Trilha: All Star - Nando Reis</span>
+          </div>
+        </div>
+        <iframe id="musicFrame" class="music-frame" title="Trilha sonora All Star de Nando Reis" allow="autoplay; encrypted-media; picture-in-picture"></iframe>
       </div>
     </dialog>
 
@@ -1290,7 +1549,36 @@
       const detailsDialog = document.querySelector("#detailsDialog");
       const playerDialog = document.querySelector("#playerDialog");
       const toast = document.querySelector(".toast");
+      const cinematicStage = document.querySelector("#cinematicStage");
+      const slideImage = document.querySelector("#slideImage");
+      const slideVideo = document.querySelector("#slideVideo");
+      const sceneLabel = document.querySelector("#sceneLabel");
+      const sceneTitle = document.querySelector("#sceneTitle");
+      const sceneDescription = document.querySelector("#sceneDescription");
+      const sceneCounter = document.querySelector("#sceneCounter");
+      const sceneProgress = document.querySelector("#sceneProgress");
+      const toggleIcon = document.querySelector("#toggleIcon");
+      const toggleLabel = document.querySelector("#toggleLabel");
+      const musicFrame = document.querySelector("#musicFrame");
       let toastTimer;
+      let sceneTimer;
+      let activeScene = 0;
+      let slideshowPlaying = false;
+
+      const musicUrl = "https://www.youtube-nocookie.com/embed/C4HeeSug3J8?autoplay=1&controls=0&loop=1&playlist=C4HeeSug3J8&rel=0&playsinline=1";
+      const sceneDuration = 5200;
+      const scenes = [
+        { type: "image", src: "assets/foto-01.jpg", label: "Cena 1", title: "A primeira fa&iacute;sca", description: "Todo filme bonito comeca com um momento que muda o jeito de olhar." },
+        { type: "image", src: "assets/foto-02.jpg", label: "Cena 2", title: "A familia que cresceu", description: "O amor ganhou novos personagens, novas risadas e ainda mais motivos para celebrar." },
+        { type: "image", src: "assets/foto-03.jpg", label: "Cena 3", title: "Do nosso jeito", description: "Entre caminhos, viagens e abra&ccedil;os, voces fizeram do cotidiano uma aventura." },
+        { type: "image", src: "assets/foto-04.jpg", label: "Cena 4", title: "Sempre lado a lado", description: "Mesmo quando a cena muda, a melhor parte continua sendo estar junto." },
+        { type: "image", src: "assets/foto-05.jpg", label: "Cena 5", title: "Uma noite especial", description: "Alguns momentos merecem figurino de gala, mas o brilho sempre vem de voces." },
+        { type: "video", src: "assets/relato.mp4", label: "Cena 6", title: "Em movimento", description: "A historia nao fica parada: ela respira, acontece e continua sendo escrita." },
+        { type: "image", src: "assets/foto-07.jpg", label: "Cena 7", title: "Perto de verdade", description: "A intimidade mora nos detalhes, nos sorrisos e nas memorias compartilhadas." },
+        { type: "image", src: "assets/foto-08.jpg", label: "Cena 8", title: "Onde tudo vira memoria", description: "Cada lugar ganha um significado novo quando voces chegam juntos." },
+        { type: "image", src: "assets/foto-09.jpg", label: "Cena 9", title: "As cenas que ficam", description: "O tempo passa, mas algumas imagens continuam morando no coracao." },
+        { type: "image", src: "assets/foto-10.jpg", label: "Cena 10", title: "Ainda no primeiro plano", description: "Depois de tantos anos, o melhor capitulo ainda e o proximo." },
+      ];
 
       const showToast = (message) => {
         toast.textContent = message;
@@ -1307,6 +1595,90 @@
         if (dialog.open) dialog.close();
       };
 
+      const updateToggleControl = () => {
+        toggleLabel.textContent = slideshowPlaying ? "Pausar" : "Continuar";
+        document.querySelector("[data-toggle-slide]").setAttribute("aria-label", slideshowPlaying ? "Pausar apresentacao" : "Continuar apresentacao");
+        toggleIcon.innerHTML = slideshowPlaying
+          ? '<path d="M8 5v14M16 5v14"></path>'
+          : '<path d="m9 6 9 6-9 6z"></path>';
+      };
+
+      const renderScene = (index) => {
+        const scene = scenes[index];
+        activeScene = index;
+        sceneLabel.textContent = scene.label;
+        sceneTitle.innerHTML = scene.title;
+        sceneDescription.innerHTML = scene.description;
+        sceneCounter.textContent = `${index + 1} / ${scenes.length}`;
+        sceneProgress.style.width = `${((index + 1) / scenes.length) * 100}%`;
+        cinematicStage.classList.remove("is-switching");
+        void cinematicStage.offsetWidth;
+        cinematicStage.classList.add("is-switching");
+
+        if (scene.type === "video") {
+          slideImage.hidden = true;
+          slideVideo.hidden = false;
+          slideVideo.src = scene.src;
+          slideVideo.currentTime = 0;
+          slideVideo.play().catch(() => {});
+        } else {
+          slideVideo.pause();
+          slideVideo.hidden = true;
+          slideImage.hidden = false;
+          slideImage.src = scene.src;
+          slideImage.alt = scene.title.replace(/&[^;]+;/g, "");
+        }
+      };
+
+      const scheduleNextScene = () => {
+        clearTimeout(sceneTimer);
+        if (!slideshowPlaying) return;
+        sceneTimer = setTimeout(() => {
+          renderScene((activeScene + 1) % scenes.length);
+          scheduleNextScene();
+        }, sceneDuration);
+      };
+
+      const startSlideshow = () => {
+        slideshowPlaying = true;
+        activeScene = 0;
+        renderScene(activeScene);
+        updateToggleControl();
+        openDialog(playerDialog);
+        musicFrame.src = musicUrl;
+        scheduleNextScene();
+      };
+
+      const stopSlideshow = () => {
+        slideshowPlaying = false;
+        clearTimeout(sceneTimer);
+        slideVideo.pause();
+        musicFrame.src = "about:blank";
+        closeDialog(playerDialog);
+        updateToggleControl();
+      };
+
+      const toggleSlideshow = () => {
+        slideshowPlaying = !slideshowPlaying;
+        if (slideshowPlaying) {
+          musicFrame.src = musicUrl;
+          scheduleNextScene();
+        } else {
+          clearTimeout(sceneTimer);
+          slideVideo.pause();
+        }
+        updateToggleControl();
+      };
+
+      const replaySlideshow = () => {
+        slideshowPlaying = true;
+        activeScene = 0;
+        renderScene(activeScene);
+        musicFrame.src = musicUrl;
+        scheduleNextScene();
+        updateToggleControl();
+      };
+
       document.querySelectorAll("[data-open-details]").forEach((button) => {
         button.addEventListener("click", () => openDialog(detailsDialog));
       });
@@ -1316,11 +1688,15 @@
       document.querySelectorAll("[data-open-player]").forEach((button) => {
         button.addEventListener("click", () => {
           closeDialog(detailsDialog);
-          openDialog(playerDialog);
+          startSlideshow();
         });
       });
 
-      document.querySelector("[data-close-player]").addEventListener("click", () => closeDialog(playerDialog));
+      document.querySelector("[data-close-player]").addEventListener("click", stopSlideshow);
+
+      document.querySelector("[data-toggle-slide]").addEventListener("click", toggleSlideshow);
+
+      document.querySelector("[data-replay]").addEventListener("click", replaySlideshow);
 
       document.querySelectorAll("[data-toast]").forEach((button) => {
         button.addEventListener("click", () => showToast(button.dataset.toast));
