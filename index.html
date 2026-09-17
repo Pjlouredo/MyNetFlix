@@ -85,56 +85,6 @@
         letter-spacing: 0;
       }
 
-      .system-icons {
-        display: flex;
-        align-items: center;
-        gap: 9px;
-      }
-
-      .signal {
-        display: flex;
-        align-items: flex-end;
-        gap: 2px;
-        height: 14px;
-      }
-
-      .signal i {
-        display: block;
-        width: 3px;
-        border-radius: 2px;
-        background: #f5f5f5;
-      }
-
-      .signal i:nth-child(1) { height: 5px; }
-      .signal i:nth-child(2) { height: 8px; }
-      .signal i:nth-child(3) { height: 11px; }
-      .signal i:nth-child(4) { height: 14px; }
-
-      .battery {
-        position: relative;
-        width: 31px;
-        height: 16px;
-        padding: 1px 3px;
-        border: 1.5px solid rgba(255, 255, 255, 0.8);
-        border-radius: 4px;
-        color: #111;
-        background: #ffd400;
-        font-size: 11px;
-        line-height: 13px;
-        text-align: center;
-      }
-
-      .battery::after {
-        position: absolute;
-        top: 4px;
-        right: -4px;
-        width: 2px;
-        height: 6px;
-        border-radius: 0 2px 2px 0;
-        background: rgba(255, 255, 255, 0.8);
-        content: "";
-      }
-
       .app-header {
         display: flex;
         align-items: center;
@@ -1261,10 +1211,6 @@
     <div class="app-shell">
       <div class="system-bar" aria-label="Barra de status">
         <span>16:40</span>
-        <div class="system-icons" aria-hidden="true">
-          <span class="signal"><i></i><i></i><i></i><i></i></span>
-          <span class="battery">95</span>
-        </div>
       </div>
 
       <header class="app-header">
